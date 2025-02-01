@@ -7,57 +7,85 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recommendationsys.ui.adapters.RecommendationAdapter
 import com.example.recommondationsys.R
+import com.example.recommondationsys.ui.home.HomeActivity
+import com.google.android.material.navigation.NavigationView
+
 
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecommendationAdapter
-    private val viewModel: HomeViewModel by viewModels() // 使用 ViewModel
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+        initRecyclerView(view)
+        initInputField(view)
 
-        recyclerView = view.findViewById(R.id.recommendation_list)
-        Log.d("HomeFragment", "RecyclerView visibility: ${recyclerView.visibility}")
+//        val homeActivity = activity as? HomeActivity
+//        homeActivity?.navigateToSettings()
 
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        return view
+    }
 
-        adapter = RecommendationAdapter(mutableListOf()) { message ->
-            viewModel.addFavourite(message) // 添加到收藏
-        }
-        recyclerView.adapter = adapter
-        Log.d("HomeFragment", "RecyclerView Adapter: $adapter")
-
+    private fun initInputField(view: View) {
         val inputField: EditText = view.findViewById(R.id.input_field)
+        inputField.requestFocus()
+
         val sendButton: Button = view.findViewById(R.id.send_button)
         sendButton.setOnClickListener {
             val input = inputField.text.toString().trim()
             if (input.isNotEmpty()) {
-                //viewModel.addMessage("user: $input")
+                Log.d("HomeFragment", "User input: $input")
                 viewModel.addMessage("Sys: recommend restaurant based on your input -> $input")
                 inputField.setText("")
             }
         }
+    }
 
-        // 观察 ViewModel 的 chatMessages
+    private fun initRecyclerView(view: View) {
+        recyclerView = view.findViewById(R.id.recommendation_list)
+
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        adapter = RecommendationAdapter(mutableListOf()) { message ->
+            viewModel.addFavourite(message)
+        }
+        recyclerView.adapter = adapter
+
         viewModel.chatMessages.observe(viewLifecycleOwner) { messages ->
-            Log.d("HomeFragment", "Received updated messages: $messages")
-            adapter.refreshMessages(messages) // 刷新 RecyclerView
-            Log.d("HomeFragment", "Refreshing RecyclerView with messages: ${viewModel.chatMessages.value}")
-            Log.d("RecyclerView", "RecyclerView item count: ${recyclerView.adapter?.itemCount}")
-
+            adapter.refreshMessages(messages)
             recyclerView.scrollToPosition(messages.size - 1)
         }
-
-        return view
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val inputField = view.findViewById<EditText>(R.id.input_field)
+        val sendButton = view.findViewById<Button>(R.id.send_button)
+
+        Log.d("HomeFragment", "Checking UI Elements: InputField = $inputField, SendButton = $sendButton")
+
+        if (inputField == null) {
+            Log.e("HomeFragment", "EditText input_field NOT found in fragment_home.xml")
+        } else {
+            Log.d("HomeFragment", "EditText input_field successfully found")
+            inputField.visibility = View.VISIBLE
+        }
+    }
+
+
 }
