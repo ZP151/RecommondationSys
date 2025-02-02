@@ -1,36 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose your preferences" />
-
-    <CheckBox
-        android:id="@+id/checkbox_chinese_food"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chinese Food" />
-
-    <CheckBox
-        android:id="@+id/checkbox_vegetarian"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Vegetarian" />
-
-    <CheckBox
-        android:id="@+id/checkbox_spicy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Spicy Food" />
-
-    <Button
-        android:id="@+id/btn_save_preferences"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save Preferences" />
-</LinearLayout>
+        android:orientation="vertical">
+
+        <!-- 标题 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎯 请选择您的饮食偏好"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="10dp"/>
+
+        <!-- 🍏 饮食习惯 (单选) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🥗 饮食习惯"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupDiet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_no_restrictions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="无饮食限制" />
+
+            <RadioButton
+                android:id="@+id/radio_vegetarian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="素食主义者" />
+
+            <RadioButton
+                android:id="@+id/radio_gluten_free"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="无麸质" />
+
+            <RadioButton
+                android:id="@+id/radio_low_sugar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="低糖饮食" />
+        </RadioGroup>
+
+        <!-- 🍽️ 偏好菜系 (多选) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🍽️ 偏好菜系"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+        <GridLayout
+            android:id="@+id/checkGroupPrefDish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="6"
+            android:rowCount="1">
+            <CheckBox
+                android:id="@+id/check_chinese"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="中餐" />
+
+            <CheckBox
+                android:id="@+id/check_western"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="西餐" />
+
+            <CheckBox
+                android:id="@+id/check_japanese"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="日料" />
+
+            <CheckBox
+                android:id="@+id/check_korean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="韩餐" />
+
+            <CheckBox
+                android:id="@+id/check_bbq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="烧烤" />
+
+            <CheckBox
+                android:id="@+id/check_fastfood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="快餐" />
+        </GridLayout>
+
+        <!-- 🍴 出行方式 (多选) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🚶 出行方式"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+        <GridLayout
+            android:id="@+id/checkGroupTransport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="6"
+            android:rowCount="1">
+            <CheckBox
+                android:id="@+id/check_walk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="步行" />
+
+            <CheckBox
+                android:id="@+id/check_bike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:text="骑车" />
+
+            <CheckBox
+                android:id="@+id/check_metro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="地铁" />
+            <CheckBox
+                android:id="@+id/check_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="驾车" />
+        </GridLayout>
+
+        <!-- 💰 你的消费水平 (单选) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💰 你的消费水平"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_budget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💲 实惠" />
+
+            <RadioButton
+                android:id="@+id/radio_midrange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💲💲 适中" />
+
+            <RadioButton
+                android:id="@+id/radio_premium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💲💲💲 高端" />
+
+        </RadioGroup>
+
+        <!-- ⏳ 就餐时长 (单选) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⏳ 就餐时长"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupDiningTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_fast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="快餐" />
+
+            <RadioButton
+                android:id="@+id/radio_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="正餐" />
+
+            <RadioButton
+                android:id="@+id/radio_gathering"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="休闲聚会" />
+
+        </RadioGroup>
+
+        <!-- 🏬 你喜欢哪种餐厅 (单选) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🏬 你喜欢哪种餐厅"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupRestaurantType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_chain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏢 连锁店" />
+
+            <RadioButton
+                android:id="@+id/radio_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏠 特色小店" />
+
+        </RadioGroup>
+
+        <!-- 保存按钮 -->
+        <Button
+            android:id="@+id/btn_save_pref"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="保存偏好"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</ScrollView>
