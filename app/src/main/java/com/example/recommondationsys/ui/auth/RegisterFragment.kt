@@ -9,9 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.recommondationsys.R
-import com.example.recommondationsys.data.User
 import com.example.recommondationsys.data.UserManager
-import com.example.recommondationsys.data.UserPrefManager
 
 class RegisterFragment : Fragment() {
     override fun onCreateView(
@@ -29,8 +27,9 @@ class RegisterFragment : Fragment() {
 
             val user = UserManager.registerUser(username, password)
 
-            if (user) {
+            if (user!=null) {
                 Toast.makeText(requireContext(), "Registered Successfully!", Toast.LENGTH_SHORT).show()
+
                 (activity as? AuthActivity)?.switchToLogin()
             } else {
                 Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show()

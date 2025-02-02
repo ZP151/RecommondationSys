@@ -9,6 +9,8 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.recommondationsys.R
 import com.example.recommondationsys.data.SessionManager
+import com.example.recommondationsys.data.UserManager
+import com.example.recommondationsys.data.UserPrefManager
 import com.example.recommondationsys.ui.auth.AuthActivity
 
 class SettingFragment : Fragment() {
@@ -22,9 +24,13 @@ class SettingFragment : Fragment() {
 
 
         logoutButton.setOnClickListener {
-            // 清除用户 Session
-            val sessionManager = SessionManager(requireContext())
-            sessionManager.clearSession()
+//            // 清除用户 Session
+//            val sessionManager = SessionManager(requireContext())
+//            sessionManager.clearSession()
+
+            // **清除当前用户信息**
+            UserManager.logout()
+            UserPrefManager.logout()
 
             // 跳转到 AuthActivity，并清除当前任务栈，防止回退
             val intent = Intent(requireContext(), AuthActivity::class.java)

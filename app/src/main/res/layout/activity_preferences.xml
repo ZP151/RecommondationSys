@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -9,60 +11,70 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- 标题 -->
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🎯 请选择您的饮食偏好"
+            android:text=" Please select your dietary preferences"
             android:textSize="18sp"
             android:textStyle="bold"
             android:paddingBottom="10dp"/>
 
-        <!-- 🍏 饮食习惯 (单选) -->
+        <!-- 🍏 Dietary Habits (Single Choice) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🥗 饮食习惯"
+            android:text="🥗 Dietary Habits"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingTop="8dp"/>
 
-        <RadioGroup
-            android:id="@+id/radioGroupDiet"
+        <!-- 使用 ConstraintLayout 让 Flow 作用于 RadioGroup -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
+
+            <!-- Flow 布局，使 RadioGroup 内的 RadioButton 自动换行 -->
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/flowDiet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="radio_no_restrictions,radio_vegetarian,radio_gluten_free,radio_low_sugar"
+                app:flow_wrapMode="chain"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
 
             <RadioButton
                 android:id="@+id/radio_no_restrictions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="无饮食限制" />
+                android:text="No Dietary Restrictions"/>
 
             <RadioButton
                 android:id="@+id/radio_vegetarian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="素食主义者" />
-
+                android:text="Vegetarian" />
             <RadioButton
                 android:id="@+id/radio_gluten_free"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="无麸质" />
-
+                android:text="Gluten-Free" />
             <RadioButton
                 android:id="@+id/radio_low_sugar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="低糖饮食" />
-        </RadioGroup>
+                android:text="Low-Sugar Diet"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- 🍽️ 偏好菜系 (多选) -->
+
+        <!-- 🍽️ Preferred Cuisine (Multiple Choice) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🍽️ 偏好菜系"
+            android:text="🍽️ Preferred Cuisine"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingTop="8dp"/>
@@ -70,50 +82,50 @@
             android:id="@+id/checkGroupPrefDish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="6"
-            android:rowCount="1">
+            android:columnCount="4"
+            android:rowCount="2">
             <CheckBox
                 android:id="@+id/check_chinese"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="中餐" />
+                android:text="Chinese" />
 
             <CheckBox
                 android:id="@+id/check_western"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="西餐" />
+                android:text="Western" />
 
             <CheckBox
                 android:id="@+id/check_japanese"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="日料" />
+                android:text="Japanese" />
 
             <CheckBox
                 android:id="@+id/check_korean"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="韩餐" />
+                android:text="Korean" />
 
             <CheckBox
                 android:id="@+id/check_bbq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="烧烤" />
+                android:text="BBQ" />
 
             <CheckBox
                 android:id="@+id/check_fastfood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="快餐" />
+                android:text="Fast Food" />
         </GridLayout>
 
-        <!-- 🍴 出行方式 (多选) -->
+        <!-- 🍴 Transportation Mode (Multiple Choice) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🚶 出行方式"
+            android:text="🚶 Transportation Mode"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingTop="8dp"/>
@@ -127,33 +139,31 @@
                 android:id="@+id/check_walk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="步行" />
+                android:text="Walking" />
 
             <CheckBox
                 android:id="@+id/check_bike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="1"
-                android:text="骑车" />
+                android:text="Biking" />
 
             <CheckBox
                 android:id="@+id/check_metro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="地铁" />
+                android:text="Subway" />
             <CheckBox
                 android:id="@+id/check_car"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="驾车" />
+                android:text="Driving" />
         </GridLayout>
 
-        <!-- 💰 你的消费水平 (单选) -->
+        <!-- 💰 Spending Level (Single Choice) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="💰 你的消费水平"
+            android:text="💰 Spending Level"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingTop="8dp"/>
@@ -168,27 +178,27 @@
                 android:id="@+id/radio_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💲 实惠" />
+                android:text="💲 Budget" />
 
             <RadioButton
                 android:id="@+id/radio_midrange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💲💲 适中" />
+                android:text="💲💲 Mid-Range" />
 
             <RadioButton
                 android:id="@+id/radio_premium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💲💲💲 高端" />
+                android:text="💲💲💲 Premium" />
 
         </RadioGroup>
 
-        <!-- ⏳ 就餐时长 (单选) -->
+        <!-- ⏳ Dining Duration (Single Choice) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⏳ 就餐时长"
+            android:text="⏳ Dining Duration"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingTop="8dp"/>
@@ -203,27 +213,27 @@
                 android:id="@+id/radio_fast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="快餐" />
+                android:text="Fast Meal" />
 
             <RadioButton
                 android:id="@+id/radio_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="正餐" />
+                android:text="Regular Meal" />
 
             <RadioButton
                 android:id="@+id/radio_gathering"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="休闲聚会" />
+                android:text="Casual Gathering" />
 
         </RadioGroup>
 
-        <!-- 🏬 你喜欢哪种餐厅 (单选) -->
+        <!-- 🏬 Preferred Restaurant Type (Single Choice) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🏬 你喜欢哪种餐厅"
+            android:text="🏬 Preferred Restaurant Type"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingTop="8dp"/>
@@ -238,22 +248,22 @@
                 android:id="@+id/radio_chain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🏢 连锁店" />
+                android:text="🏢 Chain Restaurant" />
 
             <RadioButton
                 android:id="@+id/radio_local"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🏠 特色小店" />
+                android:text="🏠 Local Specialty" />
 
         </RadioGroup>
 
-        <!-- 保存按钮 -->
+        <!-- Save Button -->
         <Button
             android:id="@+id/btn_save_pref"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="保存偏好"
+            android:text="Save Preferences"
             android:layout_marginTop="16dp"/>
     </LinearLayout>
 </ScrollView>

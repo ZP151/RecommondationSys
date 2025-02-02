@@ -1,26 +1,48 @@
 package com.example.recommondationsys.data
 
+import android.content.Context
+import android.content.SharedPreferences
+import com.example.recommondationsys.data.dao.UserPrefDao
+import com.example.recommondationsys.data.dao.UserPrefDaoImpl
+import com.example.recommondationsys.data.entity.UserPreference
 import java.util.UUID
 
 object UserPrefManager {
-    private val userPreferences = mutableListOf<UserPreference>()
+    private const val PREF_NAME = "user_pref_settings"
+    private const val KEY_CURRENT_USER_ID = "current_user_id"
 
-    // 关联 User 的 ID，而不是 username
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var userPrefDao: UserPrefDao
+
+    fun init(context: Context) {
+        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        userPrefDao = UserPrefDaoImpl() // 未来可以换成 Room 实现
+    }
+
+    /** 记录当前用户 ID */
+    fun setCurrentUser(userId: String) {
+        sharedPreferences.edit().putString(KEY_CURRENT_USER_ID, userId).apply()
+    }
+
+    /** 获取当前用户的 ID */
+    fun getCurrentUserId(): String? {
+        return sharedPreferences.getString(KEY_CURRENT_USER_ID, null)
+    }
+
+    /** 获取当前用户偏好设置 */
+    fun getUserPreference(): UserPreference {
+        val userId = getCurrentUserId() ?: return UserPreference(id = "default", userId = "default")
+        return userPrefDao.getUserPreferenceByUserId(userId)
+            ?: UserPreference(id = UUID.randomUUID().toString(), userId = userId)
+    }
+
+    /** 保存用户偏好设置 */
     fun saveUserPreference(userPreference: UserPreference) {
-        val existingPrefIndex = userPreferences.indexOfFirst { it.userId == userPreference.userId }
-        if (existingPrefIndex != -1) {
-            userPreferences[existingPrefIndex] = userPreference  // 更新
-        } else {
-            userPreferences.add(userPreference)  // 新增
-        }
+        userPrefDao.saveUserPreference(userPreference)
     }
 
-    fun getUserPreference(userId: String): UserPreference {
-        return userPreferences.find { it.userId == userId }
-            ?: UserPreference(id = UUID.randomUUID().toString(), userId = userId).also { userPreferences.add(it) }
+    /** 退出时清除 */
+    fun logout() {
+        sharedPreferences.edit().remove(KEY_CURRENT_USER_ID).apply()
     }
-    /*fun getUserPreference(userId: String): UserPreference? {
-        return userPreferences.find { it.userId == userId }
-    }*/
-
 }
