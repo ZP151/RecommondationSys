@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.recommondationsys.R
 import com.example.recommondationsys.data.UserManager
 import com.example.recommondationsys.data.UserPrefManager
-import com.example.recommondationsys.data.UserPreference
+import com.example.recommondationsys.data.entity.UserPreference
 import com.example.recommondationsys.ui.home.HomeActivity
 import java.util.UUID
 
@@ -21,10 +21,26 @@ class PrefActivity : AppCompatActivity() {
 
         userId = intent.getStringExtra("userId") ?: return
 
+        // ✅ 获取所有 RadioButton
+        val radioButtons = listOf(
+            findViewById<RadioButton>(R.id.radio_no_restrictions),
+            findViewById<RadioButton>(R.id.radio_vegetarian),
+            findViewById<RadioButton>(R.id.radio_gluten_free),
+            findViewById<RadioButton>(R.id.radio_low_sugar)
+        )
+
+        // ✅ 让所有 RadioButton 互斥（手动管理单选）
+        radioButtons.forEach { radioButton ->
+            radioButton.setOnClickListener {
+                radioButtons.forEach { it.isChecked = false }
+                radioButton.isChecked = true
+            }
+        }
+
         findViewById<Button>(R.id.btn_save_pref).setOnClickListener {
             savePreferences()
-            UserManager.setUserNotNew(userId) // 标记用户已完成偏好设置
-            Toast.makeText(this, "偏好已保存！", Toast.LENGTH_SHORT).show()
+            UserManager.setUserNotNew() // 标记用户已完成偏好设置
+            Toast.makeText(this, "Preference saved！", Toast.LENGTH_SHORT).show()
             navigateToHome()
         }
     }
@@ -36,28 +52,28 @@ class PrefActivity : AppCompatActivity() {
         val userPreference = UserPreference(
             id = UUID.randomUUID().toString(),
             userId = userId,
-            dietPreference = getSelectedRadioValue(R.id.radioGroupDiet),
+            dietPreference = getSelectedDietValue(), // ✅ 改成手动管理的 RadioButton 逻辑
             pricePreference = getSelectedRadioValue(R.id.radioGroupPrice),
             diningTime = getSelectedRadioValue(R.id.radioGroupDiningTime),
             restaurantType = getSelectedRadioValue(R.id.radioGroupRestaurantType),
             preferredCuisines = getCheckedValues(
                 mapOf(
-                    R.id.check_chinese to "中餐",
-                    R.id.check_western to "西餐",
-                    R.id.check_japanese to "日料",
-                    R.id.check_korean to "韩餐",
-                    R.id.check_bbq to "烧烤",
-                    R.id.check_fastfood to "快餐"
+                    R.id.check_chinese to "Chinese",
+                    R.id.check_western to "Western",
+                    R.id.check_japanese to "Japanese",
+                    R.id.check_korean to "Korean",
+                    R.id.check_bbq to "BBQ",
+                    R.id.check_fastfood to "FastFood"
                 )
             ),
             transportMode = getCheckedValues(
                 mapOf(
-                    R.id.check_walk to "步行",
-                    R.id.check_bike to "骑车",
-                    R.id.check_metro to "地铁",
-                    R.id.check_car to "驾车"
+                    R.id.check_walk to "Walk",
+                    R.id.check_bike to "Bike",
+                    R.id.check_metro to "Subway",
+                    R.id.check_car to "Drive"
                 )
-            ).firstOrNull() ?: "步行"
+            ).firstOrNull() ?: "Walk"
         )
 
         // 存入 UserPrefManager
@@ -71,6 +87,19 @@ class PrefActivity : AppCompatActivity() {
         val group = findViewById<RadioGroup>(groupId)
         val selectedId = group?.checkedRadioButtonId ?: return ""
         return findViewById<RadioButton>(selectedId)?.text.toString()
+    }
+    /**
+     * 获取选中的 Dietary Preference（手动管理的 RadioButton 组）
+     */
+    private fun getSelectedDietValue(): String {
+        val radioButtons = listOf(
+            findViewById<RadioButton>(R.id.radio_no_restrictions),
+            findViewById<RadioButton>(R.id.radio_vegetarian),
+            findViewById<RadioButton>(R.id.radio_gluten_free),
+            findViewById<RadioButton>(R.id.radio_low_sugar)
+        )
+
+        return radioButtons.firstOrNull { it.isChecked }?.text?.toString() ?: ""
     }
 
     /**
