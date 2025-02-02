@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.recommondationsys.R
 import com.example.recommondationsys.data.User
 import com.example.recommondationsys.data.UserManager
+import com.example.recommondationsys.data.UserPrefManager
 
 class RegisterFragment : Fragment() {
     override fun onCreateView(
@@ -26,8 +27,9 @@ class RegisterFragment : Fragment() {
             val username = inputUsername.text.toString()
             val password = inputPassword.text.toString()
 
-            val newUser = User(username, password)
-            if (UserManager.registerUser(newUser)) {
+            val user = UserManager.registerUser(username, password)
+
+            if (user) {
                 Toast.makeText(requireContext(), "Registered Successfully!", Toast.LENGTH_SHORT).show()
                 (activity as? AuthActivity)?.switchToLogin()
             } else {

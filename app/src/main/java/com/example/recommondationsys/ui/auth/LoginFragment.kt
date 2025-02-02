@@ -13,6 +13,10 @@ import com.example.recommondationsys.ui.home.HomeActivity
 import com.example.recommondationsys.R
 import com.example.recommondationsys.data.SessionManager
 import com.example.recommondationsys.data.UserManager
+import com.example.recommondationsys.data.UserPrefManager
+import com.example.recommondationsys.data.UserPreference
+import com.example.recommondationsys.ui.PrefActivity
+import java.util.UUID
 
 class LoginFragment : Fragment() {
     private lateinit var sessionManager: SessionManager
@@ -32,11 +36,29 @@ class LoginFragment : Fragment() {
             val username = inputUsername.text.toString()
             val password = inputPassword.text.toString()
 
-            if (UserManager.validateUser(username, password)) {
+            val user = UserManager.getUserByUsername(username)
+
+            if (user != null && user.password == password) {
                 sessionManager.saveUser(username)
+
                 Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(requireContext(), HomeActivity::class.java))
-                activity?.finish()
+
+                // **如果该用户没有 UserPreference，则创建**
+                val userPref = UserPrefManager.getUserPreference(user.id)
+                if (userPref == null) {
+                    UserPrefManager.saveUserPreference(
+                        UserPreference(
+                            id = UUID.randomUUID().toString(),
+                            userId = user.id
+                        )
+                    )
+                }
+
+                val targetActivity = if (UserManager.isNewUser(username)) PrefActivity::class.java else HomeActivity::class.java
+                startActivity(Intent(requireContext(), targetActivity).apply {
+                    putExtra("userId", user.id)
+                })
+                requireActivity().finish()
             } else {
                 Toast.makeText(requireContext(), "Invalid username or password", Toast.LENGTH_SHORT).show()
             }
