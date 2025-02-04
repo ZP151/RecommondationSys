@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.recommondationsys.ui.PrefActivity
 import com.example.recommondationsys.ui.home.HomeActivity
 import com.example.recommondationsys.R
-import com.example.recommondationsys.data.SessionManager
+//import com.example.recommondationsys.data.SessionManager
 import com.example.recommondationsys.data.UserManager
 import com.example.recommondationsys.data.UserPrefManager
 

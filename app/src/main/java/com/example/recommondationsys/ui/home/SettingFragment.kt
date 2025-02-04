@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.recommondationsys.R
-import com.example.recommondationsys.data.SessionManager
+//import com.example.recommondationsys.data.SessionManager
 import com.example.recommondationsys.data.UserManager
 import com.example.recommondationsys.data.UserPrefManager
 import com.example.recommondationsys.ui.auth.AuthActivity
