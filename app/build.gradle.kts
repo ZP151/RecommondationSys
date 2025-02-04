@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -50,7 +51,10 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.flexbox)
     implementation(libs.firebase.crashlytics.buildtools)
-//    implementation(libs.gson)
+    implementation(libs.androidx.parcelize)
+    implementation(libs.retrofit)
+
+    //    implementation(libs.gson)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

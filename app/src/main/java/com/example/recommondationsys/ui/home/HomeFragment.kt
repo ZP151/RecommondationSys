@@ -7,19 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recommendationsys.ui.adapters.RecommendationAdapter
 import com.example.recommondationsys.R
-import com.example.recommondationsys.ui.home.HomeActivity
-import com.google.android.material.navigation.NavigationView
+import com.example.recommondationsys.viewmodel.HomeViewModel
 
 
 class HomeFragment : Fragment() {
@@ -60,7 +54,6 @@ class HomeFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recommendation_list)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
-
         adapter = RecommendationAdapter(mutableListOf()) { message ->
             viewModel.addFavourite(message)
         }
