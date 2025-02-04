@@ -1,4 +1,4 @@
-package com.example.recommendationsys.ui.home
+package com.example.recommondationsys.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

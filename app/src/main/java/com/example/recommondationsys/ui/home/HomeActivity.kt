@@ -43,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
 
 
         // 绑定 DrawerLayout
-//        drawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout = findViewById(R.id.drawer_layout)
 
         // 绑定 NavController
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
