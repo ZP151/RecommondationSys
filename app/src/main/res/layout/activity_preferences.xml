@@ -121,7 +121,7 @@
                 android:text="Fast Food" />
         </GridLayout>
 
-        <!-- 🍴 Transportation Mode (Multiple Choice) -->
+        <!--&lt;!&ndash; 🍴 Transportation Mode (Multiple Choice) &ndash;&gt;
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:text="Driving" />
         </GridLayout>
-
+-->
         <!-- 💰 Spending Level (Single Choice) -->
         <TextView
             android:layout_width="wrap_content"
@@ -194,7 +194,7 @@
 
         </RadioGroup>
 
-        <!-- ⏳ Dining Duration (Single Choice) -->
+       <!-- &lt;!&ndash; ⏳ Dining Duration (Single Choice) &ndash;&gt;
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
 
         </RadioGroup>
 
-        <!-- 🏬 Preferred Restaurant Type (Single Choice) -->
+        &lt;!&ndash; 🏬 Preferred Restaurant Type (Single Choice) &ndash;&gt;
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -256,7 +256,7 @@
                 android:layout_height="wrap_content"
                 android:text="🏠 Local Specialty" />
 
-        </RadioGroup>
+        </RadioGroup>-->
 
         <!-- Save Button -->
         <Button

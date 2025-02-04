@@ -54,8 +54,8 @@ class PrefActivity : AppCompatActivity() {
             userId = userId,
             dietPreference = getSelectedDietValue(), // ✅ 改成手动管理的 RadioButton 逻辑
             pricePreference = getSelectedRadioValue(R.id.radioGroupPrice),
-            diningTime = getSelectedRadioValue(R.id.radioGroupDiningTime),
-            restaurantType = getSelectedRadioValue(R.id.radioGroupRestaurantType),
+            /*diningTime = getSelectedRadioValue(R.id.radioGroupDiningTime),
+            restaurantType = getSelectedRadioValue(R.id.radioGroupRestaurantType),*/
             preferredCuisines = getCheckedValues(
                 mapOf(
                     R.id.check_chinese to "Chinese",
@@ -65,7 +65,7 @@ class PrefActivity : AppCompatActivity() {
                     R.id.check_bbq to "BBQ",
                     R.id.check_fastfood to "FastFood"
                 )
-            ),
+            )/*,
             transportMode = getCheckedValues(
                 mapOf(
                     R.id.check_walk to "Walk",
@@ -73,7 +73,7 @@ class PrefActivity : AppCompatActivity() {
                     R.id.check_metro to "Subway",
                     R.id.check_car to "Drive"
                 )
-            ).firstOrNull() ?: "Walk"
+            ).firstOrNull() ?: "Walk"*/
         )
 
         // 存入 UserPrefManager

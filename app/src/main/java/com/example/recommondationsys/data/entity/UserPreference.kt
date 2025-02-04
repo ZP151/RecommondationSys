@@ -4,11 +4,15 @@ package com.example.recommondationsys.data.entity
 
 data class UserPreference(
     val id: String,
-    val userId: String,  // 关联 User 的 ID
-    var dietPreference: String = "无忌口",  // 🍽 饮食习惯
-    var preferredCuisines: List<String> = emptyList(),  // 🍱 偏好菜系
-    var transportMode: String = "步行",  // 🚶 出行方式
-    var pricePreference: String = "💲 实惠",  // 💰 价格偏好
-    var diningTime: String = "快餐",  // ⏳ 就餐时长
-    var restaurantType: String = "🏢 连锁店",  // 🏬 餐厅类型
+    val userId: String,  // Associated User ID
+    var dietPreference: String = "No dietary restrictions",  // 🍽 Dietary preference
+    var preferredCuisines: List<String> = emptyList(),  // 🍱 Preferred cuisines
+    var pricePreference: String = "💲 Afordable",  // 💰 Price preference
+
+
+    //不用了
+    /*var transportMode: String = "Walking",  // 🚶 Mode of transportation
+    var diningTime: String = "Fast food",  // ⏳ Dining duration
+    var restaurantType: String = "🏢 Chain restaurant"  // 🏬 Restaurant type*/
+
 )

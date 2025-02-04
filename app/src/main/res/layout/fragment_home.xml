@@ -9,7 +9,13 @@
         android:id="@+id/recommendation_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+
+        <!-- 嵌套推荐结果的组件-->
+        <!-- 推荐的具体内容和收藏按钮-->
+
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"
