@@ -1,3 +1,4 @@
+/*
 package com.example.recommondationsys.data
 
 import android.content.Context
@@ -25,3 +26,4 @@ class SessionManager(context: Context) {
         prefs.edit().clear().apply()
     }
 }
+*/

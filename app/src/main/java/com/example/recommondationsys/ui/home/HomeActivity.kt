@@ -20,7 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.recommendationsys.ui.home.HomeFragment
-import com.example.recommondationsys.data.SessionManager
+//import com.example.recommondationsys.data.SessionManager
 import com.example.recommondationsys.ui.auth.AuthActivity
 import com.google.android.material.navigation.NavigationView
 import com.example.recommondationsys.R
@@ -43,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
 
 
         // 绑定 DrawerLayout
-        drawerLayout = findViewById(R.id.drawer_layout)
+//        drawerLayout = findViewById(R.id.drawer_layout)
 
         // 绑定 NavController
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
