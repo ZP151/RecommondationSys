@@ -2,14 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
+
 }
 
 android {
-    namespace = "com.example.recommondationsys"
+    namespace = "com.example.recommendationsys"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.recommondationsys"
+        applicationId = "com.example.recommendationsys"
         minSdk = 29
         targetSdk = 35
         versionCode = 1
@@ -53,7 +54,7 @@ dependencies {
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.androidx.parcelize)
     implementation(libs.retrofit)
-
+    implementation(libs.retrofit.gson)
     //    implementation(libs.gson)
 
     testImplementation(libs.junit)
