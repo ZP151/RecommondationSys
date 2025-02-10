@@ -1,4 +1,4 @@
-package com.example.recommondationsys.data.entity
+package com.example.recommondationsys.data.model
 
 
 

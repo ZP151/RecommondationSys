@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="8dp"
+    android:background="@android:color/white">
+
+    <!-- 主信息部分 -->
+    <TextView
+        android:id="@+id/restaurantName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Restaurant Name"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/favoriteButton"
+        tools:text="Domino's Pizza (West Coast Drive)" />
+
+    <!-- 评分星星 -->
+    <ImageView
+        android:id="@+id/ratingStar"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/icon_rating"
+        app:layout_constraintTop_toBottomOf="@id/restaurantName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/restaurantRating"
+        tools:src="@drawable/icon_rating" />
+
+    <!-- 评分 -->
+<!--    可能是这里有问题-->
+    <TextView
+        android:id="@+id/restaurantRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/restaurantName"
+        app:layout_constraintStart_toEndOf="@id/ratingStar"
+        app:layout_constraintBottom_toBottomOf="@id/ratingStar"
+        tools:text="3.3" />
+
+    <!-- 收藏按钮 -->
+    <ImageView
+        android:id="@+id/favoriteButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_not_favorite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="4dp"
+        tools:src="@drawable/ic_not_favorite" />
+
+    <!-- 展开箭头 -->
+    <ImageView
+        android:id="@+id/expandButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_arrow_more"
+        app:layout_constraintTop_toBottomOf="@id/restaurantRating"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="4dp"
+        tools:src="@drawable/ic_arrow_more" />
+
+    <!-- 详情部分 -->
+    <LinearLayout
+        android:id="@+id/detailsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/expandButton"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/restaurantPriceLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price level"
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_blue_dark"
+            tools:text=" price_level" />
+        <TextView
+            android:id="@+id/restaurantAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            tools:text="2 Tampines Central 5, #01-20 Century Square" />
+
+        <TextView
+            android:id="@+id/restaurantPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phone Number"
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_blue_dark"
+            tools:text="+65 6260 0030" />
+
+        <TextView
+            android:id="@+id/restaurantWebsite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:text="Website"
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_blue_dark"
+            tools:text="www.abcd.com" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.androidx.parcelize)
     implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
 
     //    implementation(libs.gson)
 

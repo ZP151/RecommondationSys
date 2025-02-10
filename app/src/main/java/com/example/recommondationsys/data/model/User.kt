@@ -1,4 +1,4 @@
-package com.example.recommondationsys.data.entity
+package com.example.recommondationsys.data.model
 
 
 data class User(
@@ -8,6 +8,4 @@ data class User(
     val age: Int? = null,
     var isNewUser: Boolean = true, // 迁移 isNewUser 到 User 里
 
-   /* val preferences: List<String>? = null,
-    var preferenceId: String? = null // 关联 UserPreference 的 ID*/
 )
