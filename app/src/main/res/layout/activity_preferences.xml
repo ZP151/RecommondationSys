@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Please select your dietary preferences"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="10dp"/>
+
+        <!-- 🍏 Dietary Habits (Single Choice) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🥗 Dietary Habits"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <!-- 使用 ConstraintLayout 让 Flow 作用于 RadioGroup -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Flow 布局，使 RadioGroup 内的 RadioButton 自动换行 -->
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/flowDiet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="radio_no_restrictions,radio_vegetarian,radio_gluten_free,radio_low_sugar"
+                app:flow_wrapMode="chain"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+            <RadioButton
+                android:id="@+id/radio_no_restrictions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Dietary Restrictions"/>
+
+            <RadioButton
+                android:id="@+id/radio_vegetarian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vegetarian" />
+            <RadioButton
+                android:id="@+id/radio_gluten_free"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gluten-Free" />
+            <RadioButton
+                android:id="@+id/radio_low_sugar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Low-Sugar Diet"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!-- 🍽️ Preferred Cuisine (Multiple Choice) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🍽️ Preferred Cuisine"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+        <GridLayout
+            android:id="@+id/checkGroupPrefDish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="4"
+            android:rowCount="2">
+            <CheckBox
+                android:id="@+id/check_chinese"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chinese" />
+
+            <CheckBox
+                android:id="@+id/check_western"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Western" />
+
+            <CheckBox
+                android:id="@+id/check_japanese"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Japanese" />
+
+            <CheckBox
+                android:id="@+id/check_korean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Korean" />
+
+            <CheckBox
+                android:id="@+id/check_bbq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BBQ" />
+
+            <CheckBox
+                android:id="@+id/check_fastfood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fast Food" />
+        </GridLayout>
+
+        <!--&lt;!&ndash; 🍴 Transportation Mode (Multiple Choice) &ndash;&gt;
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🚶 Transportation Mode"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+        <GridLayout
+            android:id="@+id/checkGroupTransport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="6"
+            android:rowCount="1">
+            <CheckBox
+                android:id="@+id/check_walk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Walking" />
+
+            <CheckBox
+                android:id="@+id/check_bike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Biking" />
+
+            <CheckBox
+                android:id="@+id/check_metro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subway" />
+            <CheckBox
+                android:id="@+id/check_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Driving" />
+        </GridLayout>
+-->
+        <!-- 💰 Spending Level (Single Choice) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💰 Spending Level"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_budget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💲 Budget" />
+
+            <RadioButton
+                android:id="@+id/radio_midrange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💲💲 Mid-Range" />
+
+            <RadioButton
+                android:id="@+id/radio_premium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💲💲💲 Premium" />
+
+        </RadioGroup>
+
+       <!-- &lt;!&ndash; ⏳ Dining Duration (Single Choice) &ndash;&gt;
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⏳ Dining Duration"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupDiningTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_fast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fast Meal" />
+
+            <RadioButton
+                android:id="@+id/radio_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regular Meal" />
+
+            <RadioButton
+                android:id="@+id/radio_gathering"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Casual Gathering" />
+
+        </RadioGroup>
+
+        &lt;!&ndash; 🏬 Preferred Restaurant Type (Single Choice) &ndash;&gt;
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🏬 Preferred Restaurant Type"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupRestaurantType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_chain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏢 Chain Restaurant" />
+
+            <RadioButton
+                android:id="@+id/radio_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏠 Local Specialty" />
+
+        </RadioGroup>-->
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btn_save_pref"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Preferences"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</ScrollView>
