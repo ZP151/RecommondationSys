@@ -9,23 +9,22 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.recommendationsys.data.network.UserManager
 import com.example.recommondationsys.ui.home.HomeActivity
+import com.example.recommondationsys.data.model.UserPreference
 import com.example.recommondationsys.R
-//import com.example.recommondationsys.data.SessionManager
-import com.example.recommondationsys.data.UserManager
-import com.example.recommondationsys.data.UserPrefManager
-import com.example.recommondationsys.data.entity.UserPreference
-import com.example.recommondationsys.ui.PrefActivity
+import com.example.recommondationsys.data.model.User
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class LoginFragment : Fragment() {
-    //private lateinit var sessionManager: SessionManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_login, container, false)
-        //sessionManager = SessionManager(requireContext())
 
         val inputUsername = view.findViewById<EditText>(R.id.input_username)
         val inputPassword = view.findViewById<EditText>(R.id.input_password)
@@ -36,57 +35,38 @@ class LoginFragment : Fragment() {
             val username = inputUsername.text.toString()
             val password = inputPassword.text.toString()
 
-            if (UserManager.validateUser(username, password)) { // ✅ 调用 validateUser() 进行密码验证
-                val user = UserManager.getCurrentUser()!!  // ✅ 获取当前用户对象
-                Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
 
-                // **如果该用户没有 UserPreference，则创建**
-                val userPref = UserPrefManager.getUserPreference()
-                if (userPref == null) {
-                    UserPrefManager.saveUserPreference(
-                        UserPreference(
-                            id = UUID.randomUUID().toString(),
-                            userId = user.id
-                        )
+                //调用loginuser，此时token和user对象都存在sharedpref里
+                val success = UserManager.loginUser(username, password)
+                if (success) {
+                    Toast.makeText(requireContext(), "登录成功!", Toast.LENGTH_SHORT).show()
+                    // 等待 UserManager.getUser() 返回非空
+                    var user: User? = null
+                    repeat(5) { // 最多等待 5 次
+                        user = UserManager.getUser()
+                        if (user != null) return@repeat
+                        delay(200) // 每次等 200ms
+                    }
+
+                    if (user == null) {
+                        Toast.makeText(requireContext(), "登录失败，无法获取用户信息!", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+                    val userId = user!!.id
+                    UserManager.saveUserPreference(
+                        UserPreference(id = UUID.randomUUID().toString(), userId = userId)
                     )
+
+                    val targetActivity = if (user!!.isNewUser) PrefActivity::class.java else HomeActivity::class.java
+                    startActivity(Intent(requireContext(), targetActivity).apply {
+                        putExtra("userId", userId)
+                    })
+
+                    requireActivity().finish()
+                } else {
+                    Toast.makeText(requireContext(), "登录失败!", Toast.LENGTH_SHORT).show()
                 }
-
-/*
-
-                val userId = UserManager.getCurrentUserId()
-            //user.password == password
-            if (userId != null ) {
-                //sessionManager.saveUser(username)
-
-                // **存储当前用户**
-                UserManager.setCurrentUser(userId)
-
-                // **获取用户对象**
-                val user = UserManager.getCurrentUser()!!
-
-                Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
-
-                // **如果该用户没有 UserPreference，则创建**
-                val userPref = UserPrefManager.getUserPreference()
-                if (userPref == null) {
-                    UserPrefManager.saveUserPreference(
-                        UserPreference(
-                            id = UUID.randomUUID().toString(),
-                            userId = user.id
-                        )
-                    )
-                }
-*/
-
-                //从登录页面决定下一步activity
-                val targetActivity = if (user.isNewUser) PrefActivity::class.java else HomeActivity::class.java
-                startActivity(Intent(requireContext(), targetActivity).apply {
-                    putExtra("userId", user.id)
-                })
-
-                requireActivity().finish()
-            } else {
-                Toast.makeText(requireContext(), "Invalid username or password", Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -17,6 +17,13 @@
         android:layout_height="wrap_content"
         android:hint="New Password"
         android:inputType="textPassword" />
+    <EditText
+        android:id="@+id/input_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Password Again"
+        android:inputType="textPassword" />
+
 
     <Button
         android:id="@+id/btn_submit_register"

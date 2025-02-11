@@ -1,84 +1,85 @@
 package com.example.recommendationsys.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.recommendationsys.ui.adapters.RecommendationAdapter
-import com.example.recommondationsys.R
-import com.example.recommondationsys.viewmodel.HomeViewModel
-
+import com.example.recommendationsys.data.network.UserManager
+import com.example.recommondationsys.databinding.FragmentHomeBinding
+import com.example.recommondationsys.ui.home.ChatAdapter
+import com.example.recommondationsys.data.model.ChatMessage
+import com.example.recommondationsys.data.model.MessageType
+import com.example.recommondationsys.ui.restaurant.RestaurantAdapter
+import com.example.recommondationsys.ui.restaurant.RestaurantViewModel
 
 class HomeFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: RecommendationAdapter
-    private val viewModel: HomeViewModel by viewModels()
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var chatAdapter: ChatAdapter
+    private val chatMessages = mutableListOf<ChatMessage>()
+    private lateinit var restaurantAdapter: RestaurantAdapter
+
+    private val restaurantViewModel: RestaurantViewModel by viewModels()
+    private val userId: String get() = UserManager.getUser()!!.id
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-        initRecyclerView(view)
-        initInputField(view)
-
-//        val homeActivity = activity as? HomeActivity
-//        homeActivity?.navigateToSettings()
-
-        return view
+    ): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    private fun initInputField(view: View) {
-        val inputField: EditText = view.findViewById(R.id.input_field)
-        inputField.requestFocus()
-
-        val sendButton: Button = view.findViewById(R.id.send_button)
-        sendButton.setOnClickListener {
-            val input = inputField.text.toString().trim()
-            if (input.isNotEmpty()) {
-                Log.d("HomeFragment", "User input: $input")
-                viewModel.addMessage("Sys: recommend restaurant based on your input -> $input")
-                inputField.setText("")
-            }
-        }
-    }
-
-    private fun initRecyclerView(view: View) {
-        recyclerView = view.findViewById(R.id.recommendation_list)
-
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = RecommendationAdapter(mutableListOf()) { message ->
-            viewModel.addFavourite(message)
-        }
-        recyclerView.adapter = adapter
-
-        viewModel.chatMessages.observe(viewLifecycleOwner) { messages ->
-            adapter.refreshMessages(messages)
-            recyclerView.scrollToPosition(messages.size - 1)
-        }
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val inputField = view.findViewById<EditText>(R.id.input_field)
-        val sendButton = view.findViewById<Button>(R.id.send_button)
+        // 初始化 RecyclerView
+        chatAdapter = ChatAdapter(requireContext(), chatMessages)
+        binding.chatRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = chatAdapter
+        }
 
-        Log.d("HomeFragment", "Checking UI Elements: InputField = $inputField, SendButton = $sendButton")
+        restaurantAdapter = RestaurantAdapter(requireContext()) { restaurant ->
+            restaurantViewModel.toggleFavorite(userId, restaurant)
+        }
 
-        if (inputField == null) {
-            Log.e("HomeFragment", "EditText input_field NOT found in fragment_home.xml")
-        } else {
-            Log.d("HomeFragment", "EditText input_field successfully found")
-            inputField.visibility = View.VISIBLE
+        // 监听 ViewModel 数据
+        restaurantViewModel.restaurants.observe(viewLifecycleOwner, Observer {
+            restaurantAdapter.updateList(it, it.filter { r -> r.isFavorite }.map { r -> r.placeId })
+        })
+
+        restaurantViewModel.favoriteRestaurants.observe(viewLifecycleOwner, Observer {
+            restaurantAdapter.updateList(it, it.map { r -> r.placeId })
+        })
+        restaurantViewModel.chatMessages.observe(viewLifecycleOwner, Observer {
+            chatMessages.clear()
+            chatMessages.addAll(it)
+            chatAdapter.notifyDataSetChanged()
+        })
+
+        // 发送查询
+        binding.sendButton.setOnClickListener {
+            val query = binding.inputField.text.toString()
+            restaurantViewModel.fetchRecommendedRestaurants(query)
+            // 先显示用户输入的消息
+            val userMessage = ChatMessage(query, MessageType.USER)
+            restaurantViewModel.addChatMessage(userMessage)  // 这里需要 `addChatMessage` 方法
+        }
+
+        // 获取收藏
+        binding.getFavoritesButton.setOnClickListener {
+            restaurantViewModel.loadFavoriteRestaurants(userId)
         }
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

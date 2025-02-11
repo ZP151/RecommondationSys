@@ -1,5 +1,6 @@
 package com.example.recommondationsys.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.recommendationsys.data.network.UserManager
 import com.example.recommondationsys.R
-import com.example.recommondationsys.data.UserManager
+import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
     override fun onCreateView(
@@ -19,20 +22,29 @@ class RegisterFragment : Fragment() {
 
         val inputUsername = view.findViewById<EditText>(R.id.input_new_username)
         val inputPassword = view.findViewById<EditText>(R.id.input_new_password)
+        val inputConfirmPassword = view.findViewById<EditText>(R.id.input_confirm_password)
+
         val btnRegister = view.findViewById<Button>(R.id.btn_submit_register)
 
         btnRegister.setOnClickListener {
             val username = inputUsername.text.toString()
             val password = inputPassword.text.toString()
+            val confirmPassword = inputConfirmPassword.text.toString().trim()
 
-            val user = UserManager.registerUser(username, password)
+            if (password != confirmPassword) {
+                Toast.makeText(requireContext(), "两次输入的密码不一致", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            if (user!=null) {
-                Toast.makeText(requireContext(), "Registered Successfully!", Toast.LENGTH_SHORT).show()
-
-                (activity as? AuthActivity)?.switchToLogin()
-            } else {
-                Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                val success = UserManager.registerUser(username, password,confirmPassword)
+                if (success) {
+                    Toast.makeText(requireContext(), "注册成功!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(requireContext(), PrefActivity::class.java))
+                    requireActivity().finish()
+                } else {
+                    Toast.makeText(requireContext(), "用户名已存在", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

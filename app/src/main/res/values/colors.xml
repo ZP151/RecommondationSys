@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="chat_user_background">#757575</color> <!-- 亮蓝色 -->
+    <color name="chat_system_background">#FFFFFF</color> <!-- 深灰色 -->
 </resources>
