@@ -21,25 +21,15 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 //        val userId = intent.getStringExtra("userId")
-        val userId = UserManager.getUserId()
+        val userId = UserManager.getUser()!!.id
 
-        if (userId.isNullOrEmpty()) {
+        if (userId.isEmpty()) {
             Log.e("HomeActivity", "UserId 为空，跳转 AuthActivity")
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
         }else {
             Log.d("HomeActivity", "User 已登录: $userId")
         }
-/*
-        if (UserManager.getUserId() == null) {
-            Log.d("HomeActivity", "检测到用户未登录，跳转到 AuthActivity")
-            // 用户未登录，跳转到登录页面
-            startActivity(Intent(this, AuthActivity::class.java))
-            finish()
-            return
-        } else {
-            Log.d("HomeActivity", "User 已登录: ${UserManager.getUserId()}")
-        }*/
 
 
         // 默认加载 HomeFragment

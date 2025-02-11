@@ -1,5 +1,6 @@
 package com.example.recommondationsys.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,7 +40,8 @@ class RegisterFragment : Fragment() {
                 val success = UserManager.registerUser(username, password,confirmPassword)
                 if (success) {
                     Toast.makeText(requireContext(), "注册成功!", Toast.LENGTH_SHORT).show()
-                    (activity as? AuthActivity)?.switchToLogin()
+                    startActivity(Intent(requireContext(), PrefActivity::class.java))
+                    requireActivity().finish()
                 } else {
                     Toast.makeText(requireContext(), "用户名已存在", Toast.LENGTH_SHORT).show()
                 }

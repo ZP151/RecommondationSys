@@ -178,19 +178,19 @@
                 android:id="@+id/radio_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💲 Budget" />
+                android:text="$ affordable" />
 
             <RadioButton
                 android:id="@+id/radio_midrange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💲💲 Mid-Range" />
+                android:text="$ $ moderate" />
 
             <RadioButton
                 android:id="@+id/radio_premium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💲💲💲 Premium" />
+                android:text="$ $ $ expensive" />
 
         </RadioGroup>
 

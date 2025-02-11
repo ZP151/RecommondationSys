@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.recommendationsys.data.network.UserManager
@@ -32,11 +33,14 @@ class SettingFragment : Fragment() {
         // 设置登出按钮
         binding.logoutButton.setOnClickListener {
             lifecycleScope.launch {
-                UserManager.logout()
-                // 跳转到 AuthActivity，并清除任务栈，防止回退
-                val intent = Intent(requireContext(), AuthActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+                val success = UserManager.logout()
+                if (success) {
+                    val intent = Intent(requireContext(), AuthActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(requireContext(), "登出失败，请重试", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

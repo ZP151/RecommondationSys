@@ -6,7 +6,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.recommendationsys.data.network.UserManager
-import com.example.recommendationsys.data.network.UserPrefManager
 import com.example.recommondationsys.ui.home.HomeActivity
 import com.example.recommondationsys.R
 import com.example.recommondationsys.data.model.UserPreference
@@ -44,6 +43,8 @@ class PrefActivity : AppCompatActivity() {
     }
 
     private fun savePreferences() {
+        userId = intent.getStringExtra("userId") ?: UserManager.getUser()?.id ?: ""
+
         val userPreference = UserPreference(
             id = UUID.randomUUID().toString(),
             userId = userId,
@@ -64,6 +65,7 @@ class PrefActivity : AppCompatActivity() {
         lifecycleScope.launch {
             // 更新  user 的 isNewUser
             UserManager.updateUserIsNew(false)
+            UserManager.saveUserPreference(userPreference)
         }
     }
 

@@ -7,7 +7,7 @@ data class UserPreference(
     val userId: String,  // Associated User ID
     var dietPreference: String = "No dietary restrictions",  // 🍽 Dietary preference
     var preferredCuisines: List<String> = emptyList(),  // 🍱 Preferred cuisines
-    var pricePreference: String = "💲 Afordable",  // 💰 Price preference
+    var pricePreference: String = "$ affordable",  // 💰 Price preference
 
 
     //不用了

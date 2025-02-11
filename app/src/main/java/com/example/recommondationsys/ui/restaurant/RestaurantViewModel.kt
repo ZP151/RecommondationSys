@@ -38,7 +38,7 @@ class RestaurantViewModel : ViewModel() {
         _chatMessages.value = _chatMessages.value.orEmpty() + userMessage
 */
         viewModelScope.launch(Dispatchers.IO) {
-            val response = RecommendRetrofitInstance.api.getRecommendations(query)
+            val response = RetrofitInstance.api.getRecommendations(query)
 
             if (response.isSuccessful) {
 

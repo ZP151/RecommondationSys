@@ -26,7 +26,7 @@ class HomeFragment : Fragment() {
     private lateinit var restaurantAdapter: RestaurantAdapter
 
     private val restaurantViewModel: RestaurantViewModel by viewModels()
-    private val userId: String get() = UserManager.getUserId().toString()
+    private val userId: String get() = UserManager.getUser()!!.id
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -62,12 +62,6 @@ class HomeFragment : Fragment() {
             chatMessages.addAll(it)
             chatAdapter.notifyDataSetChanged()
         })
-/*
-        restaurantViewModel.chatMessages.observe(viewLifecycleOwner, Observer {
-            chatMessages.clear()
-            chatMessages.addAll(it.map { msg -> ChatMessage(msg, MessageType.RECOMMENDATION) })
-            chatAdapter.notifyDataSetChanged()
-        })*/
 
         // 发送查询
         binding.sendButton.setOnClickListener {

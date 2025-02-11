@@ -16,10 +16,11 @@ class AuthActivity : AppCompatActivity() {
 
         // 1️⃣ 检查 SharedPreferences 是否已存储 userId
         val user = UserManager.getUser()
-        if (UserManager.getToken() != null && user != null) {
-            Log.d("AuthActivity", "已登录，跳转 HomeActivity")
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.putExtra("userId", user.id) // 确保传递 userId
+        if (user != null) {
+            Log.d("AuthActivity", "已登录，检查 isNewUser")
+            val targetActivity = if (user.isNewUser) PrefActivity::class.java else HomeActivity::class.java
+            val intent = Intent(this, targetActivity)
+            intent.putExtra("userId", user.id)
             startActivity(intent)
             finish()
         } else {
@@ -28,24 +29,6 @@ class AuthActivity : AppCompatActivity() {
 
         }
 
-        /*val user = UserManager.getUser()
-
-        if (user != null) {
-            Log.d("AuthActivity", "User logged in: ${user.username}, New User: ${user.isNewUser}")
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
-            return
-        }*/
-
-       /* if (user != null) {
-            Log.d("AuthActivity", "User logged in: ${user.username}, New User: ${user.isNewUser}")
-
-            val targetActivity = if (user.isNewUser) PrefActivity::class.java else HomeActivity::class.java
-            startActivity(Intent(this, targetActivity))
-            finish()
-            return
-        }
-*/
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.auth_fragment_container, LoginFragment())
