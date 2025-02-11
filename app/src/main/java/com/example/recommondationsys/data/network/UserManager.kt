@@ -161,7 +161,7 @@ object UserManager {
     }
 
 
-
+//11111
     suspend fun updateUserIsNew(isNew: Boolean) {
         val currentUser = getUser()
         if (currentUser != null) {
