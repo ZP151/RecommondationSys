@@ -10,76 +10,131 @@
     android:background="@android:color/white">
 
     <!-- 主信息部分 -->
-    <TextView
-        android:id="@+id/restaurantName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Restaurant Name"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/favoriteButton"
-        tools:text="Domino's Pizza (West Coast Drive)" />
-
-    <!-- 评分星星 -->
-    <ImageView
-        android:id="@+id/ratingStar"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@drawable/icon_rating"
-        app:layout_constraintTop_toBottomOf="@id/restaurantName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/restaurantRating"
-        tools:src="@drawable/icon_rating" />
-
-    <!-- 评分 -->
-<!--    可能是这里有问题-->
-    <TextView
-        android:id="@+id/restaurantRating"
+    <!--    <TextView-->
+    <!--        android:id="@+id/restaurantName"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Restaurant Name"-->
+    <!--        android:textSize="16sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        android:textColor="@android:color/black"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/favoriteButton"-->
+    <!--        tools:text="Domino's Pizza (West Coast Drive)" />-->
+    <LinearLayout
+        android:id="@+id/titleLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/restaurantName"
-        app:layout_constraintStart_toEndOf="@id/ratingStar"
-        app:layout_constraintBottom_toBottomOf="@id/ratingStar"
-        tools:text="3.3" />
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ratingLayout">
+
+        <!-- 餐厅名称 -->
+        <TextView
+            android:id="@+id/restaurantName"
+            android:layout_width="wrap_content"
+            android:maxWidth="280dp"
+            android:layout_height="wrap_content"
+            android:text="Restaurant Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- 收藏按钮 -->
+        <ImageView
+            android:id="@+id/favoriteIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Add to Favorite"
+            android:padding="4dp"
+            android:src="@drawable/ic_not_favorite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/toMapIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Go to Google Maps"
+            android:padding="4dp"
+            android:src="@drawable/ic_to_google"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/darker_gray" />
+
+    </LinearLayout>
+
+    <!-- 评分星星 -->
+    <LinearLayout
+        android:id="@+id/ratingLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleLayout"
+        app:layout_constraintBottom_toTopOf="@id/detailsLayout">
+
+        <ImageView
+            android:id="@+id/starIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_not_favorite"
+            android:contentDescription="Star"
+            app:tint="@android:color/holo_orange_light" />
+
+        <TextView
+            android:id="@+id/restaurantRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.5"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:paddingStart="4dp"/>
+    </LinearLayout>
 
     <!-- 收藏按钮 -->
-    <ImageView
-        android:id="@+id/favoriteButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_not_favorite"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:padding="4dp"
-        tools:src="@drawable/ic_not_favorite" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/favoriteButton"-->
+    <!--        android:layout_width="24dp"-->
+    <!--        android:layout_height="24dp"-->
+    <!--        android:src="@drawable/ic_not_favorite"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        android:padding="4dp"-->
+    <!--        tools:src="@drawable/ic_not_favorite" />-->
 
     <!-- 展开箭头 -->
-    <ImageView
-        android:id="@+id/expandButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_arrow_more"
-        app:layout_constraintTop_toBottomOf="@id/restaurantRating"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="4dp"
-        tools:src="@drawable/ic_arrow_more" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/expandButton"-->
+    <!--        android:layout_width="24dp"-->
+    <!--        android:layout_height="24dp"-->
+    <!--        android:visibility="visible"-->
+    <!--        android:src="@drawable/ic_arrow_more"-->
+    <!--        android:contentDescription="Expand"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/ratingLayout"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        android:padding="4dp"-->
+    <!--        tools:src="@drawable/ic_arrow_more" />-->
 
-    <!-- 详情部分 -->
+    <!-- 详情部分 (默认隐藏)-->
     <LinearLayout
         android:id="@+id/detailsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/expandButton"
-        app:layout_constraintStart_toStartOf="parent">
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/ratingLayout"
+        app:layout_constraintBottom_toTopOf="@id/moreButtonLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
         <TextView
             android:id="@+id/restaurantPriceLevel"
             android:layout_width="match_parent"
@@ -88,34 +143,123 @@
             android:textSize="14sp"
             android:textColor="@android:color/holo_blue_dark"
             tools:text=" price_level" />
-        <TextView
-            android:id="@+id/restaurantAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Address"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
-            tools:text="2 Tampines Central 5, #01-20 Century Square" />
 
-        <TextView
-            android:id="@+id/restaurantPhone"
-            android:layout_width="match_parent"
+        <!--地址-->
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Phone Number"
-            android:textSize="14sp"
-            android:textColor="@android:color/holo_blue_dark"
-            tools:text="+65 6260 0030" />
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
 
-        <TextView
-            android:id="@+id/restaurantWebsite"
-            android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/locationIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_address"
+                android:contentDescription="Location"/>
+
+            <TextView
+                android:id="@+id/restaurantAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"
+                android:paddingStart="4dp"
+                tools:text="2 Tampines Central 5, #01-20 Century Square" />
+
+        </LinearLayout>
+
+        <!-- 电话 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:text="Website"
-            android:textSize="14sp"
-            android:textColor="@android:color/holo_blue_dark"
-            tools:text="www.abcd.com" />
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
 
+            <ImageView
+                android:id="@+id/phoneIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_tel"
+                android:contentDescription="Phone"/>
+
+            <TextView
+                android:id="@+id/restaurantPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phone Number"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:paddingStart="4dp"
+                tools:text="+65 6260 0030" />
+        </LinearLayout>
+
+        <!-- 网站 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
+
+            <ImageView
+                android:id="@+id/websiteIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_website"
+                android:contentDescription="Website"/>
+
+            <TextView
+                android:id="@+id/restaurantWebsite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:text="Website"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:paddingStart="4dp"
+                tools:text="www.abcd.com" />
+
+        </LinearLayout>
+
+        <!-- 展开/折叠按钮 -->
+        <!--        <ImageView-->
+        <!--            android:id="@+id/lessButton"-->
+        <!--            android:layout_width="24dp"-->
+        <!--            android:layout_height="24dp"-->
+        <!--            android:visibility="visible"-->
+        <!--            android:src="@drawable/ic_arrow_less"-->
+        <!--            android:contentDescription="Less"-->
+        <!--            android:layout_gravity="center_horizontal"-->
+        <!--            android:padding="4dp"-->
+        <!--            app:tint="@android:color/darker_gray" />-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/moreButtonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detailsLayout"
+        android:clickable="false">
+
+        <!-- 展开按钮 -->
+        <ImageView
+            android:id="@+id/expandButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:visibility="visible"
+            android:src="@drawable/ic_arrow_more"
+            android:contentDescription="Expand"
+            android:layout_gravity="center_horizontal"
+            android:padding="4dp"
+            app:tint="@android:color/darker_gray"
+            android:clickable="true"
+            android:focusable="true"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

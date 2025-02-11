@@ -1,5 +1,6 @@
 package com.example.recommendationsys.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -65,6 +66,11 @@ class HomeFragment : Fragment() {
 
         // 发送查询
         binding.sendButton.setOnClickListener {
+            //记录搜索次数
+            val sharedPreferences = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            val searchCount = sharedPreferences.getInt("search_count", 0)
+            sharedPreferences.edit().putInt("search_count", searchCount + 1).apply()
+
             val query = binding.inputField.text.toString()
             restaurantViewModel.fetchRecommendedRestaurants(query)
             // 先显示用户输入的消息

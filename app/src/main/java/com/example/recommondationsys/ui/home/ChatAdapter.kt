@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recommondationsys.databinding.ItemChatMessageBinding
 import android.content.Context
+import android.util.Log
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recommondationsys.R
 import com.example.recommondationsys.data.model.ChatMessage
 import com.example.recommondationsys.data.model.MessageType
+import com.example.recommondationsys.ui.restaurant.RestaurantAdapter
 
 class ChatAdapter(private val context: Context, private val chatMessages: MutableList<ChatMessage>) :
     RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
@@ -44,17 +47,20 @@ class ChatAdapter(private val context: Context, private val chatMessages: Mutabl
                     } else {
                         binding.restaurantMessageLayout.visibility = View.VISIBLE
 
-                        // 清除旧的推荐??
-                        binding.restaurantListContainer.removeAllViews()
-                        // 动态添加餐厅
-                        // message.recommendations为空，是否要隐藏restaurantMessageLayout?
-                        for (restaurant in message.recommendations) {
-                            val restaurantView = LayoutInflater.from(context)
-                                .inflate(R.layout.item_restaurant, binding.restaurantListContainer, false)
+                        // **防止 RecyclerView 拦截滑动**
+                        binding.restaurantRecyclerView.isNestedScrollingEnabled = false
+                        // **设置 RecyclerView**
+                        binding.restaurantRecyclerView.layoutManager = LinearLayoutManager(context)
 
-                            restaurantView.findViewById<TextView>(R.id.restaurantName).text = restaurant.name
-                            binding.restaurantListContainer.addView(restaurantView)
+                        // 绑定 Adapter
+                        val restaurantAdapter = RestaurantAdapter(context) { restaurant ->
+                            // 处理收藏点击
+                            Log.d("DEBUG", "收藏按钮点击: ${restaurant.name}")
                         }
+                        binding.restaurantRecyclerView.adapter = restaurantAdapter
+
+                        // 更新列表数据
+                        restaurantAdapter.updateList(message.recommendations, emptyList())
                     }
                 }
             }

@@ -6,11 +6,18 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.recommendationsys.data.network.RestaurantApiService
+import com.example.recommendationsys.data.network.RetrofitInstance.api
+import com.example.recommendationsys.data.network.UserManager
 //import com.bumptech.glide.Glide
 import com.example.recommondationsys.R
 import com.example.recommondationsys.data.model.Restaurant
 import com.example.recommondationsys.databinding.ItemRestaurantBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RestaurantAdapter(
     private val context: Context,
@@ -57,17 +64,21 @@ class RestaurantAdapter(
 
             // 收藏按钮状态
             val isFavorite = favoritePlaceIds.contains(restaurant.placeId)
-            binding.favoriteButton.setImageResource(
+            binding.favoriteIcon.setImageResource(
                 if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_not_favorite
             )
 
             // 处理收藏点击事件
-            binding.favoriteButton.setOnClickListener {
+            binding.favoriteIcon.setOnClickListener {
                 val newFavoriteStatus = !isFavorite
                 if (newFavoriteStatus) {
                     favoritePlaceIds.add(restaurant.placeId)
+                    addFavorite(restaurant)
+
                 } else {
                     favoritePlaceIds.remove(restaurant.placeId)
+                    removeFavorite(restaurant)
+
                 }
 
                 notifyItemChanged(adapterPosition, "update_favorite")
@@ -75,7 +86,7 @@ class RestaurantAdapter(
             }
 
             // 设置展开状态
-            val isExpanded = expandedMap[restaurant.placeId] ?: false
+            val isExpanded = expandedMap[restaurant.placeId] ?: true
             binding.detailsLayout.visibility = if (isExpanded) View.VISIBLE else View.GONE
             binding.expandButton.setImageResource(
                 if (isExpanded) R.drawable.ic_arrow_less else R.drawable.ic_arrow_more
@@ -83,7 +94,7 @@ class RestaurantAdapter(
 
             // 处理展开/收起点击事件
             binding.expandButton.setOnClickListener {
-                val newExpandedState = !(expandedMap[restaurant.placeId] ?: false)
+                val newExpandedState = !(expandedMap[restaurant.placeId] ?: true)
                 expandedMap[restaurant.placeId] = newExpandedState
 
                 // 立即更新 UI，防止复用问题
@@ -116,6 +127,51 @@ class RestaurantAdapter(
             } else {
                 binding.restaurantImage.setImageResource(R.drawable.placeholder_image)
             }*/
+        }
+        private fun addFavorite(restaurant: Restaurant) {
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val response = api.addFavorite(UserManager.getUser()!!.id, restaurant)
+                    if (response.isSuccessful) {
+                        favoritePlaceIds.add(restaurant.placeId)
+                        launch(Dispatchers.Main) {
+                            notifyItemChanged(adapterPosition)
+                            Toast.makeText(context, "收藏成功", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        launch(Dispatchers.Main) {
+                            Toast.makeText(context, "收藏失败", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        private fun removeFavorite(restaurant: Restaurant) {
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val response = api.removeFavorite(UserManager.getUser()!!.id, restaurant.placeId)
+                    if (response.isSuccessful) {
+                        favoritePlaceIds.remove(restaurant.placeId)
+                        launch(Dispatchers.Main) {
+                            notifyItemChanged(adapterPosition)
+                            Toast.makeText(context, "取消收藏成功", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        launch(Dispatchers.Main) {
+                            Toast.makeText(context, "取消收藏失败", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 

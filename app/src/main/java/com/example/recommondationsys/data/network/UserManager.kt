@@ -6,6 +6,7 @@ import android.util.Log
 import com.example.recommondationsys.data.model.User
 import com.example.recommondationsys.data.model.UserPreference
 import com.example.recommondationsys.utils.Constants
+import com.example.recommondationsys.utils.Constants.BASE_URL
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import retrofit2.Response
@@ -37,14 +38,23 @@ interface UserApiService {
         @Path("userId") userId: String,
         @Body preference: UserPreference
     ): Response<Unit>
-    @POST("/api/user/logout/{userId}") // 新增 logout 接口
-    suspend fun logout(@Path("userId") userId: String
-    ): Response<Unit>
+
+    @POST("/api/user/logout")
+    suspend fun logout(
+        @Body request: LogoutRequest,
+        @Header("Cookie") sessionId: String // ✅ 确保这里正确接收 `JSESSIONID`
+    ): Response<Map<String, String>>
+
+
 }
 
 // 请求数据
 data class RegisterRequest(val username: String, val password: String, val confirmPassword: String)
 data class LoginRequest(val username: String, val password: String)
+data class LogoutRequest(
+    val userId: String,
+    val searchCount: Int
+)
 
 // API 响应
 data class RegisterApiResponse(val user: User)
@@ -64,7 +74,7 @@ object UserManager {
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -105,6 +115,17 @@ object UserManager {
                 if (response.isSuccessful) {
                     response.body()?.user?.let { user ->
                         saveUser(user)
+                        // ✅ 解析 `JSESSIONID`
+
+                        val cookies = response.headers()["Set-Cookie"]
+                        val sessionId = cookies?.split(";")?.find { it.startsWith("JSESSIONID=") }?.split("=")?.get(1)
+                        if (sessionId != null) {
+                            sharedPreferences.edit().putString("session_id", sessionId).apply()
+                            Log.d("UserManager", "存储 Session ID: $sessionId")
+                        } else {
+                            Log.e("UserManager", "没有收到 JSESSIONID")
+                        }
+
                         return@withContext true
                     }
                 }
@@ -140,7 +161,15 @@ object UserManager {
 
         if (currentUser != null) {
             try {
-                val response = apiService.logout(currentUser.id)
+                val searchCount = sharedPreferences.getInt("search_count", 0)
+
+                val logoutRequest = LogoutRequest(currentUser.id, searchCount)
+
+                // ✅ 读取 `JSESSIONID`
+                val sessionId = sharedPreferences.getString("session_id", "")
+
+                // ✅ 发送请求，携带 `Session Cookie`
+                val response = apiService.logout(logoutRequest, "JSESSIONID=$sessionId")
                 if (response.isSuccessful) {
                     Log.d("UserManager", "用户登出成功")
                     isLogoutSuccess = true  // 只有后端成功时才设置为 true
@@ -152,10 +181,12 @@ object UserManager {
             }
         }
 
-        // 无论后端是否成功登出，都需要清理本地数据
-        loginJob?.cancel()
-        sharedPreferences.edit().clear().apply()
-        Log.d("UserManager", "用户本地登出成功")
+        // ✅ 只有成功登出才清除本地数据
+        if (isLogoutSuccess) {
+            loginJob?.cancel()
+            sharedPreferences.edit().clear().apply()
+            Log.d("UserManager", "用户本地登出成功")
+        }
 
         return isLogoutSuccess
     }

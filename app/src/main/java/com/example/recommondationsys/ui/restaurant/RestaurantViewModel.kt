@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recommendationsys.data.network.RecommendRetrofitInstance
 import com.example.recommendationsys.data.network.RetrofitInstance
 import com.example.recommondationsys.data.model.ChatMessage
 import com.example.recommondationsys.data.model.MessageType
@@ -153,16 +152,32 @@ class RestaurantViewModel : ViewModel() {
             val response = RetrofitInstance.api.getFavoriteRestaurants(userId)
             if (response.isSuccessful) {
                 val favorites = response.body() ?: emptyList()
+                val favoriteIds = favorites.map { it.placeId }
 
+                val parsedRestaurants = favorites.map { restaurant ->
+                    Restaurant(
+                        placeId = restaurant.placeId,
+                        name = restaurant.name,
+                        address = restaurant.address,
+                        rating = restaurant.rating,
+                        userRatingsTotal = restaurant.userRatingsTotal,
+                        priceLevel = restaurant.priceLevel,
+                        phoneNumber = restaurant.phoneNumber,
+                        website = restaurant.website,
+                        latitude = restaurant.latitude,
+                        longitude = restaurant.longitude,
+                        photoReference = restaurant.photoReference,
+                        isFavorite = true // ✅ 这里直接标记为收藏
+                    )
+                }
+                // 生成收藏餐厅的消息，并加入 `chatMessages`
+                val favoriteMessage = ChatMessage(
+                    text = "您的收藏餐厅如下：",
+                    type = MessageType.RECOMMENDATION,
+                    recommendations = parsedRestaurants
+                )
                 withContext(Dispatchers.Main) {
                     _favoriteRestaurants.value = favorites
-
-                    // 生成收藏餐厅的消息，并加入 `chatMessages`
-                    val favoriteMessage = ChatMessage(
-                        text = "您的收藏餐厅如下：",
-                        type = MessageType.RECOMMENDATION,
-                        recommendations = favorites
-                    )
 
                     _chatMessages.value = _chatMessages.value.orEmpty() + favoriteMessage
                 }

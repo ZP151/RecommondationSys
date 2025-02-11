@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.androidx.parcelize)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.urlconnection)
+
 
     //    implementation(libs.gson)
 

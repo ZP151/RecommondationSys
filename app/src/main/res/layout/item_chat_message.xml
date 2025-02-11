@@ -59,11 +59,11 @@
             android:paddingBottom="8dp" />
 
             <!-- 动态添加 `item_restaurant.xml` -->
-            <LinearLayout
-                android:id="@+id/restaurantListContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/restaurantRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
 
     </LinearLayout>
 
