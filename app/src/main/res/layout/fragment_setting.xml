@@ -1,20 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:fitsSystemWindows="true"
-    android:paddingTop="?attr/actionBarSize">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/logout_button"
+    <!-- 背景色 -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:backgroundTint="#FF0000"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="60dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#FFF8DC"
+        android:fitsSystemWindows="true">
 
-</LinearLayout>
+        <!-- Logout 按钮 -->
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="#FF5722"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="60dp"
+            android:elevation="4dp"
+            android:padding="12dp" />
+    </LinearLayout>
+</FrameLayout>
