@@ -5,25 +5,45 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/homeFragment">
 
+    <!-- HomeFragment -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.recommondationsys.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_recommendation_content">
+        tools:layout="@layout/fragment_home">
+        <!-- 跳转到 SettingFragment -->
         <action
             android:id="@+id/action_homeFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
     </fragment>
 
+    <!-- SettingFragment -->
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.example.recommondationsys.ui.home.SettingFragment"
         android:label="Settings"
-        tools:layout="@layout/fragment_setting" >
+        tools:layout="@layout/fragment_setting">
+        <!-- 跳转到 ChangePasswordFragment -->
         <action
-            android:id="@+id/action_settingFragment_self"
-            app:destination="@id/settingFragment" />
+            android:id="@+id/action_settingFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <!-- 跳转到 UpdateProfileFragment -->
+        <action
+            android:id="@+id/action_settingFragment_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
     </fragment>
 
+    <!-- ChangePasswordFragment -->
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.recommondationsys.ui.home.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" />
 
+    <!-- UpdateProfileFragment -->
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="com.example.recommondationsys.ui.home.UpdateProfileFragment"
+        android:label="Update Profile"
+        tools:layout="@layout/fragment_update_profile" />
 </navigation>

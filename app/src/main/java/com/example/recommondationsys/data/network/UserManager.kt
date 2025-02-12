@@ -20,36 +20,41 @@ import java.io.EOFException
 
 // 定义 API 接口
 interface UserApiService {
+    // 已有的接口
     @POST("/api/user/register")
-    suspend fun register(@Body request: RegisterRequest
-    ): Response<RegisterApiResponse>
+    suspend fun register(@Body request: RegisterRequest): Response<RegisterApiResponse>
 
     @POST("/api/user/login")
-    suspend fun login(@Body request: LoginRequest
-    ): Response<LoginApiResponse>
+    suspend fun login(@Body request: LoginRequest): Response<LoginApiResponse>
 
     @PATCH("/api/user/update-isnew/{userId}")
-    suspend fun updateUserIsNew(@Path("userId") userId: String
-    ): Response<Unit>
+    suspend fun updateUserIsNew(@Path("userId") userId: String): Response<Unit>
 
     @POST("/api/user/updatePreferences/{userId}")
     suspend fun savePreferences(
         @Path("userId") userId: String,
         @Body preference: UserPreference
     ): Response<Unit>
-    @POST("/api/user/logout/{userId}") // 新增 logout 接口
-    suspend fun logout(@Path("userId") userId: String
+
+    @POST("/api/user/logout/{userId}")
+    suspend fun logout(@Path("userId") userId: String): Response<Unit>
+
+    // 新增修改密码接口
+    @POST("/api/user/changePassword/{userId}")
+    suspend fun changePassword(
+        @Path("userId") userId: String,
+        @Body request: ChangePasswordRequest
     ): Response<Unit>
 }
 
 // 请求数据
 data class RegisterRequest(val username: String, val password: String, val confirmPassword: String)
 data class LoginRequest(val username: String, val password: String)
+data class ChangePasswordRequest(val currentPassword: String, val newPassword: String)
 
 // API 响应
 data class RegisterApiResponse(val user: User)
 data class LoginApiResponse(val user: User)
-
 
 
 // UserManager，负责与后端交互
@@ -78,6 +83,56 @@ object UserManager {
     fun isUserLoggedIn(): Boolean {
         return sharedPreferences.contains(USER_KEY)
     }
+
+    // 新增方法：修改密码
+    suspend fun changePassword(currentPassword: String, newPassword: String): Boolean {
+        val currentUser = getUser()
+        if (currentUser == null) {
+            Log.e("UserManager", "当前用户未登录")
+            return false
+        }
+
+        return try {
+            val response = apiService.changePassword(
+                userId = currentUser.id,
+                request = ChangePasswordRequest(currentPassword, newPassword)
+            )
+            if (response.isSuccessful) {
+                Log.d("UserManager", "密码修改成功")
+                true
+            } else {
+                Log.e("UserManager", "密码修改失败: ${response.errorBody()?.string()}")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e("UserManager", "修改密码请求异常: ${e.message}")
+            false
+        }
+    }
+    suspend fun updateUserProfile(username: String, age: Int, email: String): Boolean {
+        val currentUser = getUser()
+        if (currentUser == null) {
+            Log.e("UserManager", "当前用户未登录")
+            return false
+        }
+
+        return try {
+            val updatedUser = currentUser.copy(username = username, age = age, email = email)
+            // 假设后端 API 有一个 updateUser 方法
+            val response = apiService.updateUser(updatedUser.id, updatedUser)
+            if (response.isSuccessful) {
+                saveUser(updatedUser) // 本地保存更新后的用户信息
+                true
+            } else {
+                Log.e("UserManager", "更新用户信息失败: ${response.errorBody()?.string()}")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e("UserManager", "更新用户信息请求异常: ${e.message}")
+            false
+        }
+    }
+
 
     suspend fun registerUser(username: String, password: String, confirmPassword: String): Boolean {
         return try {
@@ -159,46 +214,4 @@ object UserManager {
 
         return isLogoutSuccess
     }
-
-
-
-    suspend fun updateUserIsNew(isNew: Boolean) {
-        val currentUser = getUser()
-        if (currentUser != null) {
-            val updatedUser = User(
-                id = currentUser.id,
-                username = currentUser.username,
-                isNewUser = isNew
-            )
-            saveUser(updatedUser)
-
-            try {
-                val response = apiService.updateUserIsNew(currentUser.id)
-                if (response.isSuccessful) {
-                    Log.d("UserManager", "isNewUser 更新成功")
-                } else {
-                    Log.e("UserManager", "更新 isNewUser 失败: ${response.errorBody()?.string()}")
-                }
-            } catch (e: Exception) {
-                Log.e("UserManager", "更新 isNewUser 发生异常: ${e.message}")
-            }
-        }
-    }
-
-    suspend fun saveUserPreference(preference: UserPreference) {
-        val currentUser = getUser()
-        if (currentUser != null) {
-            try {
-                val response = apiService.savePreferences(currentUser.id, preference)
-                if (response.isSuccessful) {
-                    Log.d("UserManager", "用户偏好设置已更新")
-                } else {
-                    Log.e("UserManager", "更新偏好设置失败: ${response.errorBody()?.string()}")
-                }
-            } catch (e: Exception) {
-                Log.e("UserManager", "更新偏好设置异常: ${e.message}")
-            }
-        }
-    }
 }
-

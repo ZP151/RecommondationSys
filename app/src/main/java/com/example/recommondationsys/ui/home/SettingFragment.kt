@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.recommendationsys.data.network.UserManager
 import com.example.recommondationsys.ui.auth.AuthActivity
 import com.example.recommondationsys.R
@@ -30,7 +30,7 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 设置登出按钮
+        // 设置登出按钮逻辑
         binding.logoutButton.setOnClickListener {
             lifecycleScope.launch {
                 val success = UserManager.logout()
@@ -43,6 +43,15 @@ class SettingFragment : Fragment() {
                 }
             }
         }
+
+        // 设置修改密码按钮逻辑
+        binding.btnChangePassword.setOnClickListener {
+            findNavController().navigate(R.id.action_settingFragment_to_changePasswordFragment)
+        }
+        binding.btnUpdateProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_settingFragment_to_updateProfileFragment)
+        }
+
     }
 
     override fun onDestroyView() {
