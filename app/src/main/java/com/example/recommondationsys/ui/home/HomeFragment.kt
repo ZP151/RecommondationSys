@@ -46,6 +46,11 @@ class HomeFragment : Fragment() {
             adapter = chatAdapter
         }
 
+        // 监听加载状态
+        restaurantViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
         restaurantAdapter = RestaurantAdapter(requireContext()) { restaurant ->
             restaurantViewModel.toggleFavorite(userId, restaurant)
         }

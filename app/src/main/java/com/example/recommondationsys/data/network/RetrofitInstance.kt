@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import java.net.CookieManager
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
     private const val BASE_URL = "http://10.0.2.2:8080/"  // 你的后端地址
@@ -13,6 +14,9 @@ object RetrofitInstance {
 
     val client = OkHttpClient.Builder()
         .cookieJar(JavaNetCookieJar(cookieManager)) // ✅ 让 Retrofit 自动存储和携带 Cookie
+        .connectTimeout(30, TimeUnit.SECONDS)  // 连接超时（默认10秒）
+        .readTimeout(30, TimeUnit.SECONDS)     // 读取超时（默认10秒）
+        .writeTimeout(30, TimeUnit.SECONDS)    // 写入超时（默认10秒）
         .build()
 
     val api: RestaurantApiService by lazy {

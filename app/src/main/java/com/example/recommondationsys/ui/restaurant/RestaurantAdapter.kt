@@ -32,7 +32,7 @@ class RestaurantAdapter(
 
     fun updateList(newList: List<Restaurant>, favoriteIds: List<String>) {
         restaurantList.clear()
-        restaurantList.addAll(newList)
+        restaurantList.addAll(newList.take(5))
         favoritePlaceIds.clear()
         favoritePlaceIds.addAll(favoriteIds)
         notifyDataSetChanged()
@@ -41,20 +41,15 @@ class RestaurantAdapter(
     inner class ViewHolder(private val binding: ItemRestaurantBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        //private var isExpanded = false
-
-
         fun bind(restaurant: Restaurant) {
-            // 设置基本信息，这里有问题？
             binding.restaurantName.text = restaurant.name
-            binding.restaurantRating.text = "Rating: ${restaurant.rating} (${restaurant.userRatingsTotal})"
+            binding.restaurantRating.text = "${restaurant.rating} (${restaurant.userRatingsTotal})"
             binding.restaurantAddress.text = restaurant.address
             binding.restaurantPhone.text = restaurant.phoneNumber ?: "No phone available"
             binding.restaurantWebsite.text = restaurant.website ?: "No website available"
 
             // 价格等级（N/A 代表无数据）
             binding.restaurantPriceLevel.text = when (restaurant.priceLevel) {
-//                0 -> "Free"
                 1 -> "Budget"
                 2 -> "Moderate"
                 3 -> "Expensive"
@@ -114,6 +109,24 @@ class RestaurantAdapter(
                 restaurant.website?.let { website ->
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(website))
                     context.startActivity(intent)
+                }
+            }
+
+            // 处理Google maps跳转
+            binding.toMapIcon.setOnClickListener {
+                val latitude = restaurant.latitude
+                val longitude = restaurant.longitude
+                val label = restaurant.name // 用餐厅名称作为标记
+
+                val gmmIntentUri = Uri.parse("geo:0,0?q=$latitude,$longitude($label)")
+
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps") // 强制使用 Google Maps 打开
+
+                if (mapIntent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(mapIntent)
+                } else {
+                    Toast.makeText(context, "Google Maps need to be downloaded.", Toast.LENGTH_SHORT).show()
                 }
             }
 

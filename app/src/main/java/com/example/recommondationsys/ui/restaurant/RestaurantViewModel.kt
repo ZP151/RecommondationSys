@@ -23,6 +23,8 @@ class RestaurantViewModel : ViewModel() {
     private val _chatMessages = MutableLiveData<List<ChatMessage>>(emptyList()) // 存储消息
     val chatMessages: LiveData<List<ChatMessage>> get() = _chatMessages
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     fun addChatMessage(message: ChatMessage) {
         _chatMessages.value = (_chatMessages.value ?: emptyList()) + message
@@ -33,10 +35,12 @@ class RestaurantViewModel : ViewModel() {
      */
     fun fetchRecommendedRestaurants(query: String) {
         //repeated userchat
-        /*val userMessage = ChatMessage(query, MessageType.USER)
-        _chatMessages.value = _chatMessages.value.orEmpty() + userMessage
-*/
+//        val userMessage = ChatMessage(query, MessageType.USER)
+//        _chatMessages.value = _chatMessages.value.orEmpty() + userMessage
+
         viewModelScope.launch(Dispatchers.IO) {
+            // 正在加载
+            _isLoading.postValue(true)
             val response = RetrofitInstance.api.getRecommendations(query)
 
             if (response.isSuccessful) {
@@ -68,18 +72,31 @@ class RestaurantViewModel : ViewModel() {
                             website = json["website"] as? String ?: "No data available",
                             latitude = (json["location"] as? Map<String, Number>)?.get("lat")?.toDouble() ?: 0.0,
                             longitude = (json["location"] as? Map<String, Number>)?.get("lng")?.toDouble() ?: 0.0,
-                            photoReference = (json["photos"] as? List<String>)?.firstOrNull() ?: ""
+                            photoReference = (json["photos"] as? List<String>)?.firstOrNull() ?: "",
+                            isFavorite = false  // 先默认是未收藏
                         )
                     }
+
+                    // 检查每个餐厅是否被收藏
+                    val updatedRestaurants = restaurantList.map { restaurant ->
+                        restaurant.copy(isFavorite = isFavorite(restaurant.placeId))
+                    }
+
                     val recommendationMessage = ChatMessage(
                         text = "推荐的餐厅如下：",
                         type = MessageType.RECOMMENDATION,
-                        recommendations = restaurantList
+                        recommendations = updatedRestaurants
                     )
                     withContext(Dispatchers.Main) {
+                        // 加载完成切换加载状态
+                        _isLoading.value = false
+
                         _chatMessages.value = _chatMessages.value.orEmpty() + recommendationMessage
                     }
                 }
+            } else {
+                // 加载完成切换加载状态
+                _isLoading.value = false
             }
         }
         /*viewModelScope.launch(Dispatchers.IO) {
@@ -148,7 +165,11 @@ class RestaurantViewModel : ViewModel() {
      * 获取用户收藏的餐厅
      */
     fun loadFavoriteRestaurants(userId: String) {
+
         viewModelScope.launch(Dispatchers.IO) {
+            // 正在加载
+            _isLoading.postValue(true)
+
             val response = RetrofitInstance.api.getFavoriteRestaurants(userId)
             if (response.isSuccessful) {
                 val favorites = response.body() ?: emptyList()
@@ -177,10 +198,14 @@ class RestaurantViewModel : ViewModel() {
                     recommendations = parsedRestaurants
                 )
                 withContext(Dispatchers.Main) {
+                    // 加载完成切换加载状态
+                    _isLoading.value = false
                     _favoriteRestaurants.value = favorites
-
                     _chatMessages.value = _chatMessages.value.orEmpty() + favoriteMessage
                 }
+            } else {
+                // 加载完成切换加载状态
+                _isLoading.postValue(false)
             }
         }
     }
@@ -221,6 +246,16 @@ class RestaurantViewModel : ViewModel() {
                     }
                 }
             }
+        }
+    }
+
+    // 调用接口检查餐厅是否被收藏
+    private suspend fun isFavorite(restaurantId: String): Boolean {
+        return try {
+            val response = RetrofitInstance.api.matchFavoriteRestaurant(restaurantId)
+            response.isSuccessful && response.body() == true
+        } catch (e: Exception) {
+            false
         }
     }
 

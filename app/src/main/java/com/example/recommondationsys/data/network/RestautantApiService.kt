@@ -22,10 +22,15 @@ interface RestaurantApiService {
     ): Response<Void>
 
     // 取消收藏
-    @DELETE("favorite/{userId}/{restaurantId}")
+    @DELETE("restaurants/favorite/{userId}/{placeId}")
     suspend fun removeFavorite(
         @Path("userId") userId: String,
-        @Path("restaurantId") restaurantId: String
+        @Path("placeId") placeId: String
     ): Response<Void>
 
+    // 匹配收藏餐厅
+    @GET("restaurants/favorites/check/{placeId}")
+    suspend fun matchFavoriteRestaurant(
+        @Path("placeId") placeId: String
+    ): Response<Boolean>
 }
